@@ -266,30 +266,8 @@ end)
 	pages.BackgroundTransparency = 1
 
 	UserInputService.InputBegan:Connect(function(i,gp)
-		if not gp -- LÓGICA DE MINIMIZAR (mantém posição, restaura só o tamanho)
-local minimized = false
-
-minimize.MouseButton1Click:Connect(function()
-	minimized = not minimized
-
-	for _,v in ipairs(main:GetChildren()) do
-		if v ~= top and v:IsA("GuiObject") then
-			v.Visible = not minimized
-		end
-	end
-
-	if minimized then
-		-- encolhe mantendo a posição atual
-		tween(main, {
-			Size = UDim2.new(originalSize.X.Scale, originalSize.X.Offset, 0, 60)
-		}, 0.3)
-	else
-		-- volta APENAS o tamanho original (posição não muda)
-		tween(main, {
-			Size = originalSize
-		}, 0.3)
-	end
-end)and i.KeyCode == toggleKey then
+		if not gp
+and i.KeyCode == toggleKey then
 			gui.Enabled = not gui.Enabled
 		end
 	end)
