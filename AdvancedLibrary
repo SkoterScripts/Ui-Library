@@ -170,6 +170,10 @@ function UILibrary:CreateWindow(title, keybind)
 	main.BackgroundColor3 = theme.Background
 	corner(main,20)
 
+-- guarda tamanho e posição originais para restaurar depois do minimize
+local originalSize = main.Size
+local originalPosition = main.Position
+
 	local top = Instance.new("Frame", main)
 top.Size = UDim2.new(1,0,0,55)
 top.BackgroundColor3 = theme.Secondary
@@ -218,21 +222,35 @@ close.TextColor3 = Color3.new(1,1,1)
 close.BackgroundColor3 = Color3.fromRGB(220, 80, 80) -- vermelho
 corner(close, 8)
 
--- LÓGICA DE MINIMIZAR
+-- LÓGICA DE MINIMIZAR (corrigida: guarda e restaura tamanho/posição originais)
 local minimized = false
+
 minimize.MouseButton1Click:Connect(function()
 	minimized = not minimized
 
-	for _,v in ipairs(main:GetChildren()) do
-		if v ~= top and v:IsA("GuiObject") then
-			v.Visible = not minimized
+	if minimized then
+		-- esconde tudo exceto o topo
+		for _,v in ipairs(main:GetChildren()) do
+			if v ~= top and v:IsA("GuiObject") then
+				v.Visible = false
+			end
 		end
-	end
 
-	tween(main, {
-		Size = minimized and UDim2.new(main.Size.X.Scale, main.Size.X.Offset, 0, 60)
-		or UDim2.new(main.Size.X.Scale, main.Size.X.Offset, 0.5, 0)
-	}, 0.3)
+		-- reduz a altura para uma barra (mantendo largura e posição X originais)
+		local targetSize = UDim2.new(originalSize.X.Scale, originalSize.X.Offset, 0, 60)
+		-- opcional: manter a mesma posição X e empurrar Y (aqui deixo a mesma posição)
+		tween(main, {Size = targetSize}, 0.28, Enum.EasingStyle.Back)
+	else
+		-- reexibe conteúdo
+		for _,v in ipairs(main:GetChildren()) do
+			if v ~= top and v:IsA("GuiObject") then
+				v.Visible = true
+			end
+		end
+
+		-- restaura para o tamanho e posição originais
+		tween(main, {Size = originalSize, Position = originalPosition}, 0.28, Enum.EasingStyle.Back)
+	end
 end)
 
 -- LÓGICA DE FECHAR
