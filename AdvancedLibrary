@@ -165,7 +165,7 @@ function UILibrary:CreateWindow(title, keybind)
 	gui.Name = "AdvancedUIv4"
 
 	local main = Instance.new("Frame", gui)
-	main.Size = UDim2.fromScale(0.38,0.5)
+	main.Size = UDim2.fromScale(0.55,0.8)
 	main.Position = UDim2.fromScale(0.31,0.25)
 	main.BackgroundColor3 = theme.Background
 	corner(main,20)
