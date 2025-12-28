@@ -172,7 +172,6 @@ function UILibrary:CreateWindow(title, keybind)
 
 -- guarda tamanho e posição originais para restaurar depois do minimize
 local originalSize = main.Size
-local originalPosition = main.Position
 
 	local top = Instance.new("Frame", main)
 top.Size = UDim2.new(1,0,0,55)
@@ -222,34 +221,28 @@ close.TextColor3 = Color3.new(1,1,1)
 close.BackgroundColor3 = Color3.fromRGB(220, 80, 80) -- vermelho
 corner(close, 8)
 
--- LÓGICA DE MINIMIZAR (corrigida: guarda e restaura tamanho/posição originais)
+-- LÓGICA DE MINIMIZAR (mantém posição, restaura só o tamanho)
 local minimized = false
 
 minimize.MouseButton1Click:Connect(function()
 	minimized = not minimized
 
+	for _,v in ipairs(main:GetChildren()) do
+		if v ~= top and v:IsA("GuiObject") then
+			v.Visible = not minimized
+		end
+	end
+
 	if minimized then
-		-- esconde tudo exceto o topo
-		for _,v in ipairs(main:GetChildren()) do
-			if v ~= top and v:IsA("GuiObject") then
-				v.Visible = false
-			end
-		end
-
-		-- reduz a altura para uma barra (mantendo largura e posição X originais)
-		local targetSize = UDim2.new(originalSize.X.Scale, originalSize.X.Offset, 0, 60)
-		-- opcional: manter a mesma posição X e empurrar Y (aqui deixo a mesma posição)
-		tween(main, {Size = targetSize}, 0.28, Enum.EasingStyle.Back)
+		-- encolhe mantendo a posição atual
+		tween(main, {
+			Size = UDim2.new(originalSize.X.Scale, originalSize.X.Offset, 0, 60)
+		}, 0.3)
 	else
-		-- reexibe conteúdo
-		for _,v in ipairs(main:GetChildren()) do
-			if v ~= top and v:IsA("GuiObject") then
-				v.Visible = true
-			end
-		end
-
-		-- restaura para o tamanho e posição originais
-		tween(main, {Size = originalSize, Position = originalPosition}, 0.28, Enum.EasingStyle.Back)
+		-- volta APENAS o tamanho original (posição não muda)
+		tween(main, {
+			Size = originalSize
+		}, 0.3)
 	end
 end)
 
@@ -273,7 +266,30 @@ end)
 	pages.BackgroundTransparency = 1
 
 	UserInputService.InputBegan:Connect(function(i,gp)
-		if not gp and i.KeyCode == toggleKey then
+		if not gp -- LÓGICA DE MINIMIZAR (mantém posição, restaura só o tamanho)
+local minimized = false
+
+minimize.MouseButton1Click:Connect(function()
+	minimized = not minimized
+
+	for _,v in ipairs(main:GetChildren()) do
+		if v ~= top and v:IsA("GuiObject") then
+			v.Visible = not minimized
+		end
+	end
+
+	if minimized then
+		-- encolhe mantendo a posição atual
+		tween(main, {
+			Size = UDim2.new(originalSize.X.Scale, originalSize.X.Offset, 0, 60)
+		}, 0.3)
+	else
+		-- volta APENAS o tamanho original (posição não muda)
+		tween(main, {
+			Size = originalSize
+		}, 0.3)
+	end
+end)and i.KeyCode == toggleKey then
 			gui.Enabled = not gui.Enabled
 		end
 	end)
