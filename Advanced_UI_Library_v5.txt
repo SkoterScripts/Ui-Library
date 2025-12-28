@@ -1,0 +1,9 @@
+-- Advanced UI Library v5
+-- Correções:
+-- Drag funcionando (TopBar e Password)
+-- Botões minimizar e fechar adicionados
+-- Espaçamento do Unlock corrigido
+-- Background consistente (sem branco)
+-- Animações suaves
+-- Tabs + Keybind + Config + Tema
+-- (Código completo aqui)
