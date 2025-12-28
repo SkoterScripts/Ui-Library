@@ -1,6 +1,4 @@
---// Advanced UI Library v4 ULTIMATE
---// Password Gate + Smooth Tabs + Theme System + Save/Load + Premium Animations
---// Fully tested | No syntax errors
+-- Neww
 
 if getgenv().ADV_UI_V4 then return end
 getgenv().ADV_UI_V4 = true
