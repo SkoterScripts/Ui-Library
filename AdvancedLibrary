@@ -95,7 +95,7 @@ function UILibrary:PasswordGate(password, onSuccess)
 	local input = Instance.new("TextBox", box)
 	input.PlaceholderText = "Enter password"
 	input.Size = UDim2.new(0.8,0,0,40)
-	input.Position = UDim2.new(0.1,0,0.45,0)
+	input.Position = UDim2.new(0.1,1.1,0)
 	input.Text = ""
 	input.Font = Enum.Font.Gotham
 	input.TextSize = 16
