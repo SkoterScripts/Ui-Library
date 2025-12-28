@@ -266,8 +266,7 @@ end)
 	pages.BackgroundTransparency = 1
 
 	UserInputService.InputBegan:Connect(function(i,gp)
-		if not gp
-and i.KeyCode == toggleKey then
+		if not gp and i.KeyCode == toggleKey then
 			gui.Enabled = not gui.Enabled
 		end
 	end)
