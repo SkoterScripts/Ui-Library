@@ -160,6 +160,50 @@ function UILibrary:CreateWindow(title, keybind)
 	titleLbl.TextColor3 = theme.Text
 	titleLbl.BackgroundTransparency = 1
 
+-- BOTÃO MINIMIZAR
+local minimize = Instance.new("TextButton", top)
+minimize.Size = UDim2.new(0,32,0,32)
+minimize.Position = UDim2.new(1,-80,0.5,-16)
+minimize.Text = "–"
+minimize.Font = Enum.Font.GothamBlack
+minimize.TextSize = 22
+minimize.TextColor3 = Color3.new(1,1,1)
+minimize.BackgroundColor3 = Color3.fromRGB(120, 220, 120) -- verde claro
+corner(minimize, 8)
+
+-- BOTÃO FECHAR
+local close = Instance.new("TextButton", top)
+close.Size = UDim2.new(0,32,0,32)
+close.Position = UDim2.new(1,-40,0.5,-16)
+close.Text = "X"
+close.Font = Enum.Font.GothamBlack
+close.TextSize = 18
+close.TextColor3 = Color3.new(1,1,1)
+close.BackgroundColor3 = Color3.fromRGB(220, 80, 80) -- vermelho
+corner(close, 8)
+
+-- LÓGICA DE MINIMIZAR
+local minimized = false
+minimize.MouseButton1Click:Connect(function()
+	minimized = not minimized
+
+	for _,v in ipairs(main:GetChildren()) do
+		if v ~= top and v:IsA("GuiObject") then
+			v.Visible = not minimized
+		end
+	end
+
+	tween(main, {
+		Size = minimized and UDim2.new(main.Size.X.Scale, main.Size.X.Offset, 0, 60)
+		or UDim2.new(main.Size.X.Scale, main.Size.X.Offset, 0.5, 0)
+	}, 0.3)
+end)
+
+-- LÓGICA DE FECHAR
+close.MouseButton1Click:Connect(function()
+	gui:Destroy()
+end)
+
 	local tabBar = Instance.new("Frame", main)
 	tabBar.Position = UDim2.new(0,15,0,70)
 	tabBar.Size = UDim2.new(1,-30,0,45)
