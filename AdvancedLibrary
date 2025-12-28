@@ -150,9 +150,6 @@ top.Size = UDim2.new(1,0,0,55)
 top.BackgroundColor3 = theme.Secondary
 corner(top,20)
 
--- 🔥 AGORA SIM: arrastar SOMENTE pelo topo
-dragify(main, top)
-
 	local titleLbl = Instance.new("TextLabel", top)
 	titleLbl.Text = title
 	titleLbl.Size = UDim2.new(1,-100,1,0)
@@ -161,6 +158,14 @@ dragify(main, top)
 	titleLbl.TextSize = 22
 	titleLbl.TextColor3 = theme.Text
 	titleLbl.BackgroundTransparency = 1
+
+-- permitir captura de input no topo e no label
+top.Active = true
+titleLbl.Active = true
+
+-- arrastar se clicar no topo OU no label do título
+dragify(main, top)
+dragify(main, titleLbl)
 
 -- BOTÃO MINIMIZAR
 local minimize = Instance.new("TextButton", top)
