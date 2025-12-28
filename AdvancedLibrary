@@ -45,23 +45,48 @@ local function corner(p,r)
 	c.Parent = p
 end
 
+-- DRAG (versão estável baseada no teste)
 local function dragify(frame, handle)
 	handle = handle or frame
-	local dragging, dragStart, startPos
-	handle.InputBegan:Connect(function(i)
-		if i.UserInputType == Enum.UserInputType.MouseButton1 then
+	local UserInputService = game:GetService("UserInputService")
+
+	local dragging = false
+	local dragInput = nil
+	local dragStart = nil
+	local startPos = nil
+
+	handle.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 			dragging = true
-			dragStart = i.Position
+			dragStart = input.Position
 			startPos = frame.Position
+
+			-- encerra quando soltar
+			input.Changed:Connect(function()
+				if input.UserInputState == Enum.UserInputState.End then
+					dragging = false
+				end
+			end)
 		end
 	end)
-	UserInputService.InputEnded:Connect(function(i)
-		if i.UserInputType == Enum.UserInputType.MouseButton1 then dragging = false end
+
+	-- rastreia movimento do mouse/touch para usar no InputChanged global
+	handle.InputChanged:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+			dragInput = input
+		end
 	end)
-	RunService.RenderStepped:Connect(function()
-		if dragging then
-			local delta = UserInputService:GetMouseLocation() - dragStart
-			frame.Position = UDim2.new(startPos.X.Scale,startPos.X.Offset+delta.X,startPos.Y.Scale,startPos.Y.Offset+delta.Y)
+
+	-- atualiza a posição enquanto o input estiver ocorrendo
+	UserInputService.InputChanged:Connect(function(input)
+		if dragging and input == dragInput then
+			local delta = input.Position - dragStart
+			frame.Position = UDim2.new(
+				startPos.X.Scale,
+				startPos.X.Offset + delta.X,
+				startPos.Y.Scale,
+				startPos.Y.Offset + delta.Y
+			)
 		end
 	end)
 end
@@ -159,15 +184,15 @@ titleLbl.TextSize = 22
 titleLbl.TextColor3 = theme.Text
 titleLbl.BackgroundTransparency = 1
 
--- garante que top e titleLbl aceitam input (necessário para InputBegan)
+-- garante que top e titleLbl aceitem input (necessário para InputBegan)
 top.Active = true
 titleLbl.Active = true
 
--- aumenta ZIndex pra garantir que capture clicks (se houver filhos que possam cobrir)
+-- opcional: traz o label acima para garantir que capture cliques
 top.ZIndex = 1
 titleLbl.ZIndex = 2
 
--- liga o drag ao topo e ao próprio label (clicando em qualquer um arrasta)
+-- liga o drag ao topo e ao label (clicando em qualquer um arrasta)
 dragify(main, top)
 dragify(main, titleLbl)
 
