@@ -150,20 +150,24 @@ top.Size = UDim2.new(1,0,0,55)
 top.BackgroundColor3 = theme.Secondary
 corner(top,20)
 
-	local titleLbl = Instance.new("TextLabel", top)
-	titleLbl.Text = title
-	titleLbl.Size = UDim2.new(1,-100,1,0)
-	titleLbl.Position = UDim2.new(0,20,0,0)
-	titleLbl.Font = Enum.Font.GothamBlack
-	titleLbl.TextSize = 22
-	titleLbl.TextColor3 = theme.Text
-	titleLbl.BackgroundTransparency = 1
+local titleLbl = Instance.new("TextLabel", top)
+titleLbl.Text = title
+titleLbl.Size = UDim2.new(1,-100,1,0)
+titleLbl.Position = UDim2.new(0,20,0,0)
+titleLbl.Font = Enum.Font.GothamBlack
+titleLbl.TextSize = 22
+titleLbl.TextColor3 = theme.Text
+titleLbl.BackgroundTransparency = 1
 
--- permitir captura de input no topo e no label
+-- garante que top e titleLbl aceitam input (necessário para InputBegan)
 top.Active = true
 titleLbl.Active = true
 
--- arrastar se clicar no topo OU no label do título
+-- aumenta ZIndex pra garantir que capture clicks (se houver filhos que possam cobrir)
+top.ZIndex = 1
+titleLbl.ZIndex = 2
+
+-- liga o drag ao topo e ao próprio label (clicando em qualquer um arrasta)
 dragify(main, top)
 dragify(main, titleLbl)
 
