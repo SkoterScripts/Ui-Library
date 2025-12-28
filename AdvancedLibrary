@@ -173,6 +173,18 @@ function UILibrary:CreateWindow(title, keybind)
 -- guarda tamanho e posição originais para restaurar depois do minimize
 local originalSize = main.Size
 
+-- ÍCONE DE HUB MINIMIZADO
+local minimizedIcon = Instance.new("ImageButton", gui)
+minimizedIcon.Size = UDim2.new(0,50,0,50)
+minimizedIcon.Position = main.Position
+minimizedIcon.BackgroundColor3 = theme.Secondary
+minimizedIcon.Visible = false
+minimizedIcon.Image = "rbxassetid://7072718366" -- ícone exemplo (pode trocar)
+corner(minimizedIcon,12)
+
+-- permite arrastar o ícone também
+dragify(minimizedIcon)
+
 	local top = Instance.new("Frame", main)
 top.Size = UDim2.new(1,0,0,55)
 top.BackgroundColor3 = theme.Secondary
@@ -221,29 +233,34 @@ close.TextColor3 = Color3.new(1,1,1)
 close.BackgroundColor3 = Color3.fromRGB(220, 80, 80) -- vermelho
 corner(close, 8)
 
--- LÓGICA DE MINIMIZAR (mantém posição, restaura só o tamanho)
+-- LÓGICA DE MINIMIZAR (vira ícone)
 local minimized = false
 
 minimize.MouseButton1Click:Connect(function()
-	minimized = not minimized
+	if minimized then return end
+	minimized = true
 
-	for _,v in ipairs(main:GetChildren()) do
-		if v ~= top and v:IsA("GuiObject") then
-			v.Visible = not minimized
-		end
-	end
+	-- posiciona o ícone exatamente onde o hub está
+	minimizedIcon.Position = main.Position
 
-	if minimized then
-		-- encolhe mantendo a posição atual
-		tween(main, {
-			Size = UDim2.new(originalSize.X.Scale, originalSize.X.Offset, 0, 60)
-		}, 0.3)
-	else
-		-- volta APENAS o tamanho original (posição não muda)
-		tween(main, {
-			Size = originalSize
-		}, 0.3)
-	end
+	-- esconde o hub
+	main.Visible = false
+
+	-- mostra o ícone
+	minimizedIcon.Visible = true
+end)
+
+-- AO CLICAR NO ÍCONE, RESTAURA O HUB
+minimizedIcon.MouseButton1Click:Connect(function()
+	if not minimized then return end
+	minimized = false
+
+	-- esconde ícone
+	minimizedIcon.Visible = false
+
+	-- restaura hub
+	main.Visible = true
+	main.Size = originalSize
 end)
 
 -- LÓGICA DE FECHAR
