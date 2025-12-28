@@ -106,7 +106,7 @@ function UILibrary:PasswordGate(password, onSuccess)
 
 	local btn = Instance.new("TextButton", box)
 	btn.Size = UDim2.new(0.5,0,0,40)
-	btn.Position = UDim2.new(0.25,0,1.2,0)
+	btn.Position = UDim2.new(0.25,0,2.5,0)
 	btn.Text = "Unlock"
 	btn.Font = Enum.Font.GothamBold
 	btn.TextSize = 16
