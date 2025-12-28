@@ -1,0 +1,168 @@
+
+--// UI Library Corrigida
+--// Criado por Biel Bueno + ajustes ChatGPT
+--// Proteção contra reexecução
+
+if getgenv().UILIBRARY_LOADED then
+	return
+end
+getgenv().UILIBRARY_LOADED = true
+
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+
+local UILibrary = {}
+
+UILibrary.Theme = {
+	PrimaryColor = Color3.fromRGB(0,170,255),
+	BackgroundColor = Color3.fromRGB(25,25,25),
+	SecondaryColor = Color3.fromRGB(35,35,35),
+	TextColor = Color3.fromRGB(255,255,255)
+}
+
+--// UTIL
+local function tween(obj, props, time)
+	TweenService:Create(
+		obj,
+		TweenInfo.new(time or 0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+		props
+	):Play()
+end
+
+--// WINDOW
+function UILibrary:CreateWindow(title)
+	local theme = self.Theme
+	local player = Players.LocalPlayer
+
+	local gui = Instance.new("ScreenGui")
+	gui.Name = "UILibrary"
+	gui.ResetOnSpawn = false
+	gui.Parent = player:WaitForChild("PlayerGui")
+
+	local main = Instance.new("Frame", gui)
+	main.Size = UDim2.fromScale(0.35,0.45)
+	main.Position = UDim2.fromScale(0.325,0.275)
+	main.BackgroundColor3 = theme.BackgroundColor
+	main.BorderSizePixel = 0
+	Instance.new("UICorner", main).CornerRadius = UDim.new(0,12)
+
+	local top = Instance.new("TextLabel", main)
+	top.Size = UDim2.new(1,0,0,40)
+	top.Text = title or "UI Library"
+	top.Font = Enum.Font.GothamBold
+	top.TextScaled = true
+	top.TextColor3 = theme.TextColor
+	top.BackgroundTransparency = 1
+
+	local content = Instance.new("ScrollingFrame", main)
+	content.Position = UDim2.new(0,10,0,50)
+	content.Size = UDim2.new(1,-20,1,-60)
+	content.CanvasSize = UDim2.new(0,0,0,0)
+	content.ScrollBarImageTransparency = 1
+	content.AutomaticCanvasSize = Enum.AutomaticSize.Y
+
+	local layout = Instance.new("UIListLayout", content)
+	layout.Padding = UDim.new(0,8)
+
+	--// DRAG
+	local dragging = false
+	local dragStart, startPos
+	local dragId = "Drag_"..main:GetDebugId()
+
+	top.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+			dragging = true
+			dragStart = input.Position
+			startPos = main.Position
+		end
+	end)
+
+	top.InputEnded:Connect(function()
+		dragging = false
+	end)
+
+	RunService:BindToRenderStep(dragId, Enum.RenderPriority.Input.Value, function()
+		if dragging then
+			local delta = UserInputService:GetMouseLocation() - dragStart
+			main.Position = UDim2.new(
+				startPos.X.Scale,
+				startPos.X.Offset + delta.X,
+				startPos.Y.Scale,
+				startPos.Y.Offset + delta.Y
+			)
+		end
+	end)
+
+	--// WINDOW OBJECT
+	local window = {}
+
+	function window:AddButton(text, callback)
+		local btn = Instance.new("TextButton", content)
+		btn.Size = UDim2.new(1,0,0,40)
+		btn.Text = text
+		btn.Font = Enum.Font.GothamBold
+		btn.TextScaled = true
+		btn.BackgroundColor3 = theme.SecondaryColor
+		btn.TextColor3 = theme.TextColor
+		btn.BorderSizePixel = 0
+		Instance.new("UICorner", btn).CornerRadius = UDim.new(0,8)
+
+		btn.MouseButton1Click:Connect(function()
+			if callback then callback() end
+		end)
+	end
+
+	function window:AddToggle(text, default, callback)
+		local toggled = default or false
+
+		local holder = Instance.new("Frame", content)
+		holder.Size = UDim2.new(1,0,0,40)
+		holder.BackgroundTransparency = 1
+
+		local label = Instance.new("TextLabel", holder)
+		label.Size = UDim2.new(0.7,0,1,0)
+		label.Text = text
+		label.Font = Enum.Font.Gotham
+		label.TextScaled = true
+		label.TextColor3 = theme.TextColor
+		label.BackgroundTransparency = 1
+
+		local toggle = Instance.new("TextButton", holder)
+		toggle.Position = UDim2.new(0.75,0,0.15,0)
+		toggle.Size = UDim2.new(0.2,0,0.7,0)
+		toggle.Text = ""
+		toggle.BorderSizePixel = 0
+		toggle.BackgroundColor3 = toggled and theme.PrimaryColor or theme.SecondaryColor
+		Instance.new("UICorner", toggle).CornerRadius = UDim.new(1,0)
+
+		local function set(state)
+			toggled = state
+			tween(toggle, {
+				BackgroundColor3 = state and theme.PrimaryColor or theme.SecondaryColor
+			})
+			if callback then callback(state) end
+		end
+
+		toggle.MouseButton1Click:Connect(function()
+			set(not toggled)
+		end)
+
+		-- callback inicial
+		if callback then callback(toggled) end
+
+		return {
+			Set = set
+		}
+	end
+
+	function window:Destroy()
+		RunService:UnbindFromRenderStep(dragId)
+		gui:Destroy()
+	end
+
+	return window
+end
+
+return UILibrary
