@@ -22,7 +22,7 @@ UILibrary.Theme = {
 	Accent = Color3.fromRGB(120,200,255),
 	Text = Color3.fromRGB(240,240,255),
 	SubText = Color3.fromRGB(170,170,190),
-	Danger = Color3.fromRGB(255, заменено, 90)
+	Danger = Color3.fromRGB(255, 90, 90)
 }
 
 --// UTILS
