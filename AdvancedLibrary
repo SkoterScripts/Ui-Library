@@ -47,7 +47,7 @@ local function corner(p,r)
 	c.Parent = p
 end
 
--- DRAG (vers„o est·vel baseada no teste)
+-- DRAG (vers√£o est√°vel baseada no teste)
 local function dragify(frame, handle)
 	handle = handle or frame
 	local UserInputService = game:GetService("UserInputService")
@@ -79,7 +79,7 @@ local function dragify(frame, handle)
 		end
 	end)
 
-	-- atualiza a posiÁ„o enquanto o input estiver ocorrendo
+	-- atualiza a posi√ß√£o enquanto o input estiver ocorrendo
 	UserInputService.InputChanged:Connect(function(input)
 		if dragging and input == dragInput then
 			local delta = input.Position - dragStart
@@ -115,7 +115,7 @@ gui.ResetOnSpawn = false
 
 	local title = Instance.new("TextLabel", box)
 	title.Size = UDim2.new(1,0,0,50)
-	title.Text = "üîí Secure Access"
+	title.Text = "√∞≈∏‚Äù‚Äô Secure Access"
 	title.Font = Enum.Font.GothamBlack
 	title.TextSize = 22
 	title.TextColor3 = UILibrary.CurrentTheme.Text
@@ -180,10 +180,10 @@ top.Size = UDim2.new(1,0,0,55)
 top.BackgroundColor3 = theme.Secondary
 corner(top,20)
 	
-	-- guarda tamanho e posiÁ„o originais para restaurar depois do minimize
+	-- guarda tamanho e posi√ß√£o originais para restaurar depois do minimize
 local originalSize = main.Size
 
--- ÕCONE DE HUB MINIMIZADO (APENAS ÕCONE, SEM FUNDO)
+-- √çCONE DE HUB MINIMIZADO (APENAS √çCONE, SEM FUNDO)
 local minimizedIcon = Instance.new("ImageButton", gui)
 minimizedIcon.Size = UDim2.new(0,48,0,48)
 minimizedIcon.Position = main.Position
@@ -216,18 +216,18 @@ titleLbl.ZIndex = 2
 dragify(main, top)
 dragify(main, titleLbl)
 	
-	-- BOT√O MINIMIZAR
+	-- BOT√ÉO MINIMIZAR
 local minimize = Instance.new("TextButton", top)
 minimize.Size = UDim2.new(0,32,0,32)
 minimize.Position = UDim2.new(1,-80,0.5,-16)
-minimize.Text = "ñ"
+minimize.Text = "‚Äì"
 minimize.Font = Enum.Font.GothamBlack
 minimize.TextSize = 22
 minimize.TextColor3 = Color3.new(1,1,1)
 minimize.BackgroundColor3 = Color3.fromRGB(120, 220, 120) -- verde claro
 corner(minimize, 8)
 
--- BOT√O FECHAR
+-- BOT√ÉO FECHAR
 local close = Instance.new("TextButton", top)
 close.Size = UDim2.new(0,32,0,32)
 close.Position = UDim2.new(1,-40,0.5,-16)
@@ -238,7 +238,7 @@ close.TextColor3 = Color3.new(1,1,1)
 close.BackgroundColor3 = Color3.fromRGB(220, 80, 80) -- vermelho
 corner(close, 8)
 
--- L”GICA DE MINIMIZAR (mostra sÛ o Ìcone)
+-- L√ìGICA DE MINIMIZAR (mostra s√≥ o √≠cone)
 local minimized = false
 
 minimize.MouseButton1Click:Connect(function()
@@ -248,17 +248,17 @@ minimize.MouseButton1Click:Connect(function()
 	-- garante que o ScreenGui esteja ativo
 	gui.Enabled = true
 
-	-- posiciona o Ìcone onde o hub est·
+	-- posiciona o √≠cone onde o hub est√°
 	minimizedIcon.Position = main.Position
 
 	-- esconde tudo
 	main.Visible = false
 
-	-- mostra apenas o Ìcone
+	-- mostra apenas o √≠cone
 	minimizedIcon.Visible = true
 end)
 
--- AO CLICAR NO ÕCONE, RESTAURA O HUB
+-- AO CLICAR NO √çCONE, RESTAURA O HUB
 minimizedIcon.MouseButton1Click:Connect(function()
 	if not minimized then return end
 	minimized = false
@@ -268,7 +268,7 @@ minimizedIcon.MouseButton1Click:Connect(function()
 	main.Size = originalSize
 end)
 
--- L”GICA DE FECHAR
+-- L√ìGICA DE FECHAR
 close.MouseButton1Click:Connect(function()
 	gui:Destroy()
 end)
