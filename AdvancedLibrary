@@ -180,7 +180,7 @@ local minimizedIcon = Instance.new("ImageButton", gui)
 minimizedIcon.Size = UDim2.new(0,50,0,50)
 minimizedIcon.Position = main.Position
 minimizedIcon.Visible = false
-minimizedIcon.Image = ""
+minimizedIcon.Image = "rbxassetid://8509514859"
 minimizedIcon.BackgroundColor3 = Color3.fromRGB(255,0,0)
 minimizedIcon.ZIndex = 999
 minimizedIcon.AutoButtonColor = false
@@ -220,7 +220,7 @@ dragify(main, titleLbl)
 local minimize = Instance.new("TextButton", top)
 minimize.Size = UDim2.new(0,32,0,32)
 minimize.Position = UDim2.new(1,-80,0.5,-16)
-minimize.Text = "–"
+minimize.Text = "-"
 minimize.Font = Enum.Font.GothamBlack
 minimize.TextSize = 22
 minimize.TextColor3 = Color3.new(1,1,1)
