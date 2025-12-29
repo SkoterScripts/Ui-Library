@@ -26,7 +26,7 @@ local mainFrame = new("Frame", {
     Parent = screenGui,
     AnchorPoint = Vector2.new(0.5, 0.5),
     Position = UDim2.new(0.5, 0, 0.5, 0),
-    Size = UDim2.new(0, 820, 0, 540),
+    Size = UDim2.new(0, 820, 0, 240),
     BackgroundColor3 = Color3.fromRGB(18, 24, 31),
     BorderSizePixel = 0
 })
