@@ -175,18 +175,20 @@ function UILibrary:CreateWindow(title, keybind)
 -- guarda tamanho e posição originais para restaurar depois do minimize
 local originalSize = main.Size
 
--- ÍCONE DE HUB MINIMIZADO
+-- ÍCONE DE HUB MINIMIZADO (APENAS ÍCONE, SEM FUNDO)
 local minimizedIcon = Instance.new("ImageButton", gui)
-minimizedIcon.Size = UDim2.new(0,50,0,50)
+minimizedIcon.Size = UDim2.new(0,48,0,48)
 minimizedIcon.Position = main.Position
 minimizedIcon.Visible = false
 minimizedIcon.Image = "rbxassetid://8509514859"
-minimizedIcon.BackgroundColor3 = Color3.fromRGB(255,0,0)
-minimizedIcon.ZIndex = 999
+
+-- remove qualquer fundo
+minimizedIcon.BackgroundTransparency = 1
+minimizedIcon.BorderSizePixel = 0
 minimizedIcon.AutoButtonColor = false
-corner(minimizedIcon,12)
-minimizedIcon.BackgroundTransparency = 0
-minimizedIcon.ImageTransparency = 0
+
+-- garante que fique acima de tudo
+minimizedIcon.ZIndex = 1000
 -- permite arrastar o ícone também
 dragify(minimizedIcon)
 
@@ -238,20 +240,23 @@ close.TextColor3 = Color3.new(1,1,1)
 close.BackgroundColor3 = Color3.fromRGB(220, 80, 80) -- vermelho
 corner(close, 8)
 
--- LÓGICA DE MINIMIZAR (vira ícone)
+-- LÓGICA DE MINIMIZAR (mostra só o ícone)
 local minimized = false
 
 minimize.MouseButton1Click:Connect(function()
 	if minimized then return end
 	minimized = true
 
-	-- posiciona o ícone exatamente onde o hub está
+	-- garante que o ScreenGui esteja ativo
+	gui.Enabled = true
+
+	-- posiciona o ícone onde o hub está
 	minimizedIcon.Position = main.Position
 
-	-- esconde o hub
+	-- esconde tudo
 	main.Visible = false
 
-	-- mostra o ícone
+	-- mostra apenas o ícone
 	minimizedIcon.Visible = true
 end)
 
@@ -260,10 +265,7 @@ minimizedIcon.MouseButton1Click:Connect(function()
 	if not minimized then return end
 	minimized = false
 
-	-- esconde ícone
 	minimizedIcon.Visible = false
-
-	-- restaura hub
 	main.Visible = true
 	main.Size = originalSize
 end)
