@@ -179,7 +179,7 @@ minimizedIcon.Size = UDim2.new(0,50,0,50)
 minimizedIcon.Position = main.Position
 minimizedIcon.BackgroundColor3 = theme.Secondary
 minimizedIcon.Visible = false
-minimizedIcon.Image = "https://create.roblox.com/store/asset/8509514859/COD-Ghost-Perfect-PNG" -- ícone exemplo (pode trocar)
+minimizedIcon.Image = "rbxassetid://8509514859" -- ícone exemplo (pode trocar)
 corner(minimizedIcon,12)
 
 -- permite arrastar o ícone também
