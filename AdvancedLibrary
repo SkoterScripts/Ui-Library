@@ -95,6 +95,8 @@ end
 function UILibrary:PasswordGate(password, onSuccess)
 	local player = Players.LocalPlayer
 	local gui = Instance.new("ScreenGui", player.PlayerGui)
+    gui.ResetOnSpawn = false
+    gui.IgnoreGuiInset = true
 	gui.Name = "PasswordGate"
 
 	local blur = Instance.new("Frame", gui)
@@ -179,9 +181,12 @@ minimizedIcon.Size = UDim2.new(0,50,0,50)
 minimizedIcon.Position = main.Position
 minimizedIcon.BackgroundColor3 = theme.Secondary
 minimizedIcon.Visible = false
-minimizedIcon.Image = "rbxassetid://8509514859" -- ícone exemplo (pode trocar)
+minimizedIcon.Image = "rbxassetid://8509514859"
+minimizedIcon.ZIndex = 999
+minimizedIcon.AutoButtonColor = false
 corner(minimizedIcon,12)
-
+minimizedIcon.BackgroundTransparency = 0
+minimizedIcon.ImageTransparency = 0
 -- permite arrastar o ícone também
 dragify(minimizedIcon)
 
